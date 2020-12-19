@@ -1,38 +1,105 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#recipe-div {
+  display: grid;
+  width: 70%;
+  height: 1204px;
+  margin: 104px auto;
+  grid-template-areas: "hdr" "ing" "ins";
+  font-size: 1em;
+  line-height: 24px;
+  /* background-color: aquamarine; */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#header {
+  /* background-color: red; */
+  grid-area: hdr;
+  display: grid;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#video-info-wrapper {
+  display: grid;
+  grid-template-areas: "vid vid inf"
 }
 
-.App-link {
-  color: #61dafb;
+#info {
+  /* background-color: palegreen; */
+  display: grid;
+  grid-area: inf;
+  height: 376px;
+  align-self:flex-start;
+  padding-right: 16px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#ingredients {
+  /* background-color: aqua; */
+  display: grid;
+  grid-area: ing;
+}
+
+#instruction {
+  /* background-color: gray; */
+  display: grid;
+  grid-area: ins;
+}
+
+a {
+  color:rgb(0, 145, 255)
+}
+iframe {
+  width: 670px;
+  height: 376px;
+  align-self: start;
+  display: grid;
+  grid-area: vid;
+}
+
+h1 {
+  font-size: 2em;
+  line-height: 40px;
+  box-sizing: border-box;
+}
+
+h2 {
+  font-size: 1.5em;
+  line-height: 32px;
+  /* padding: 0px;
+  margin: 0px; */
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+.info-list {
+  list-style: none;
+  margin-bottom: 0px;
+}
+
+.add-to-favorites-button {
+  width: 179px;
+  height: 56px;
+  padding: 16px;
+  border-style: none;
+  background-color: white;
+  border-color: white;
+  border: solid solid red;
+  border-radius: 4px;
+  box-shadow: 0px 0px 2px rgba(141, 141, 148, 0.16), 0px 4px 8px -2px rgba(141, 141, 148, 0.28);
+  /* margin-bottom: 16px; */
+}
+
+.ingredient-and-instruction-wrapper {
+  width: 100%;
+  border: black;
+  background-color: white;
+  box-shadow: 0px 0px 2px rgba(141, 141, 148, 0.16), 0px 4px 8px -2px rgba(141, 141, 148, 0.28);
+}
+
+.instruction-paragraph {
+  width: 70%;
+  margin: 24px auto;
+  /* background-color: indianred; */
 }

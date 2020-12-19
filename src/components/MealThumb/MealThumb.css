@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+}
+
+#all-meals-wrapper {
+    margin: 8px auto;
+    /* background-color: pink; */
+    width: 70%;
+    display: grid;
+    
+    grid-template-areas: "1fr 1fr 1fr 1fr" "1fr 1fr 1fr 1fr" "1fr 1fr 1fr 1fr";
+}
+
+#all-meals-wrapper-wrapper {
+    /* background-color: honeydew; */
+    margin: 0px auto;
+}
+
+#meal-module-wrapper {
+    /* background-color: plum; */
+    width: 220px;
+    margin-top: 16px;
+    height: 320px;
+}
+
+#fav-meals-wrapper-wrapper {
+    margin-top: 64px;
+}
+
+.name-and-img-wrapper {
+    height: 292px;
+    padding: 0;
+    margin: 0;
+    /* background-color: purple; */
+}
+
+.name-and-img-wrapper:hover {
+    box-shadow: 0px 2px 6px rgba(141, 141, 148, 0.5), 0px 16px 8px -8px rgba(141, 141, 148, 0.5);
+}
+
+.meal-module {
+    text-decoration: none;
+}
+
+.meal-module-image {
+    width: 220px;
+    height: 220px;
+    margin: 0;
+}
+
+.meal-module-name {
+    height: 72px;
+    background-color: rgb(39, 39, 41);
+    color: rgb(240, 240, 245);
+    font-size: 14px;
+    line-height: 20px;
+    padding: 16px;
+    font-weight: 600;
+}
+
+.meal-module-category {
+    font-size: 12px;
+    color: rgb(114, 114, 119);
+    line-height: 24px;
+    margin: 0px;
+    font-weight: 600
+}
+
+.meal-module-link {
+    font-style: none;
+}
+
+.meal-module {
+    list-style: none;
+    display: inline-block;
+    display: grid;
+    grid-area: 1fr;
+    justify-self: center;
+}
+
+.add-to-favorite {
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(39, 39, 41);
+    display: grid;
+    margin: 4px 0 8px 0;
+    text-align: right;
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+}
+
+.fav-wrapper {
+    background-color: cadetblue;
+    width: 100%;
+    height: 500px;
+}
+
+.message {
+    margin: 100px auto;
+    color: rgb(39, 39, 41);
+    text-align: center;
+}
+
+.search-result {
+    margin-top: 30px;
+    margin-bottom: 0px;
+    color: rgb(39, 39, 41);
+    text-align: center;
+}
+
+.small-fav-btn {
+    color: grey;
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+}
+
+.text-link {
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.heart-outlined {
+    fill: grey;
+}
+.heart-outlined:hover {
+    fill: #FF695B;
+}
+
+.heart-filled {
+    fill: #FF695B;
+}
+.heart-filled:hover {
+    fill: #F9464B;
+}
