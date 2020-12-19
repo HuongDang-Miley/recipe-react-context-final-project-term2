@@ -1,26 +1,11 @@
-// import React from 'react'
-// import { BrowserRouter as Router, Link } from 'react-router-dom'
-// import { MealThumb } from './MealThumb'
-// import { FavButton } from './FavButton'
-// import './MealThumb.css'
-
-// export const MealThumbWrapper = ({ item }) => {
-//     return (
-//         <div id='all-meals-wrapper'>
-//             <Link className={'meal-module-link'} to={{ pathname: '/main/recipe' }}>
-//                 <MealThumb item={item} />
-//             </Link>
-//             <FavButton item={item} />
-//         </div>
-
-//     )
-// }
 
 import React from 'react';
+import { BrowserRouter as Router, Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { MealThumb } from './MealThumb'
 import { FavButton } from './FavButton'
+import MenuAppBar from '../menuBars/MenuAppBar'
 import './MealThumb.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -44,30 +29,29 @@ const wrapper = {
 
 export default function FullWidthGrid({ randomList }) {
     const classes = useStyles();
-    console.log(randomList)
     return (
-        <div style={wrapper}>
-
-            <div className={classes.root}>
-                <Grid container spacing={3} direction="row" justify="center">
-                    {randomList !== undefined
-                        ? (randomList.map(item => {
-                            return (
-                                <Grid item xs={6} sm={3}>
-                                    <MealThumb item={item} />
-                                    <FavButton className='small-fav-btn' item={item} />
-                                </Grid>
-                            )
-                        }))
-                        : ''
-                }
-                a module appear hear
-                </Grid>
-
+        <>
+            <MenuAppBar />
+            <div style={wrapper}>
+                <div className={classes.root}>
+                    <Grid container spacing={3} direction="row" justify="center">
+                        {randomList !== undefined
+                            ? (randomList.map(item => {
+                                return (
+                                    <Grid item xs={6} sm={3}>
+                                        <Link to={{ pathname: `/single-meal`, meal: { item } }}>
+                                            <MealThumb item={item} />
+                                        </Link>
+                                        <FavButton className='small-fav-btn' item={item} />
+                                    </Grid>
+                                )
+                            }))
+                            : ''
+                        }
+                    </Grid>
+                </div>
             </div>
-
-
-        </div>
+        </>
     );
 }
 

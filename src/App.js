@@ -1,10 +1,9 @@
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-// import { MealThumbWrapper } from './components/MealThumb/MealThumbWrapper'
 import FullWidthGrid from './components/MealThumb/MealThumbWrapper'
-import MenuAppBar from './components/MenuAppBar/MenuAppBar'
-// import FullWidthGrid  from './components/MealThumb/Grid'
+
+import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
 import './App.css';
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
       })
 
       // Add like = false property to every meal
-      // let latestMeals = response.data.meals
       let latestMeals = response.data.meals.map(item => {
         item.like = false
         return item
@@ -32,23 +30,17 @@ function App() {
     catch (e) { console.log(e) }
   }, [])
 
-  const displayMeals = (randomList) => {
-    if (randomList !== undefined) {
-      return (
-        <FullWidthGrid randomList={randomList} />
-      )
-    }
-  }
-
-
 
   return (
     <div className="App">
-      <MenuAppBar/>
-      {/* <FullWidthGrid /> */}
-      This is a new app
       <Router>
-        {displayMeals(randomList)}
+        {/* <MenuAppBar /> */}
+        <Switch>
+          <Route exact path='/all-meals'>
+            <FullWidthGrid randomList={randomList} />
+          </Route>
+          <Route exact path='/single-meal' component={SingleMealPage} />
+        </Switch>
       </Router>
     </div>
   );

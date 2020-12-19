@@ -1,0 +1,133 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  #recipe-div {
+    display: grid;
+    width: 75%;
+    margin: 64px auto;
+    grid-template-areas: "hdr" "ing" "ins";
+    font-size: 1em;
+    line-height: 24px;
+    overflow: auto;
+    /* background-color: aquamarine; */
+  }
+  
+  #header {
+    /* background-color: red; */
+    grid-area: hdr;
+    display: grid;
+  }
+  
+  #footer {
+    background-color: #272729;
+    color: #BABBC2;
+    width: 100%;
+    text-align: center;
+    margin-top: 24px;
+    padding: 16px;
+    font-size: 0.875em;
+    line-height: 24px;
+  }
+  #video-info-wrapper {
+    display: grid;
+    grid-template-areas: "vid vid inf"
+  }
+  
+  #info {
+    /* background-color: palegreen; */
+    display: grid;
+    grid-area: inf;
+    height: 376px;
+    align-self:flex-start;
+    padding-right: 16px;
+  }
+  
+  #ingredients {
+    /* background-color: aqua; */
+    margin: auto;
+    width: 99%;
+    display: grid;
+    grid-area: ing;
+  }
+  
+  #instruction {
+    /* background-color: gray; */
+    margin: auto;
+    width: 99%;
+    display: grid;
+    grid-area: ins;
+    overflow: auto;
+  }
+  
+  a {
+    color:rgb(0, 145, 255)
+  }
+  iframe {
+    width: 670px;
+    height: 376px;
+    align-self: start;
+    display: grid;
+    grid-area: vid;
+  }
+  
+  h1 {
+    font-size: 2em;
+    line-height: 40px;
+    box-sizing: border-box;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+    line-height: 32px;
+    /* padding: 0px;
+    margin: 0px; */
+  }
+  
+  li {
+    margin-bottom: 8px;
+  }
+  
+  .info-list {
+    list-style: none;
+    margin-bottom: 0px;
+    text-align: left;
+justify-self: start;
+  }
+
+  .recipe-link {
+    
+  }
+  
+  .add-to-favorites-button {
+    width: 179px;
+    height: 56px;
+    padding: 16px;
+    border-style: none;
+    background-color: white;
+    border-color: white;
+    border: solid solid red;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px rgba(141, 141, 148, 0.3), 0px 4px 8px -2px rgba(141, 141, 148, 0.28);
+  }
+  
+  .ingredient-and-instruction-wrapper {
+    width: 100%;
+    border: black;
+    background-color: white;
+    box-shadow: 0px 0px 2px rgba(141, 141, 148, 0.3), 0px 2px 8px -2px rgba(141, 141, 148, 0.28);
+    overflow: auto;
+  }
+  
+  .instruction-paragraph {
+    width: 70%;
+    margin: 24px auto;
+    /* background-color: indianred; */
+    overflow: auto;
+  }
+
+
+  .recipe-hero-img {
+    width: 488px;
+    height: 488px;
+  }
