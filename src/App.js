@@ -1,15 +1,30 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import Login from './components/loginAndRegister/Login'
 import Register from './components/loginAndRegister/Register'
 import RandomList from './components/MealThumb/RandomList'
 import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
 
 import './App.css';
+import { FaRegClosedCaptioning } from 'react-icons/fa'
 
 function App() {
   let [randomList, setRandomList] = useState([])
+  let [auth, setAuth] = useState(false)
+  let [user, setUser] = useState({})
+
+    // Get user data from jwtToken
+    const authorize = (jwtToken) => {
+      let decodedToken = jwt_decode(jwtToken)
+      console.log('decoded browser token', decodedToken)
+      setAuth(true)
+      setUser({
+        email: decodedToken.email,
+        _id: decodedToken._id
+      })
+    }
 
   useEffect(async () => {
     try {
@@ -36,8 +51,8 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path='/login' component={Login}/>
-          <Route exact path='/register' component={Register}/>
+          <Route exact path='/login' component={(props) => <Login {...props} authorize={authorize} />} />
+          <Route exact path='/register' component={(props) => <Register {...props} authorize={authorize} />} />
           <Route exact path='/all-meals'>
             <RandomList randomList={randomList} />
           </Route>
