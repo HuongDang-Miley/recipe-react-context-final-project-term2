@@ -57,16 +57,15 @@ export const SingleMealPage = (props) => {
             }
             try {
                 let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', favMeal)
-                console.log(addMeal)
+                console.log('result add a meal',addMeal)
             }
             catch (e) { console.log(e) }
         } else if (meal.like === true) {
             try {
-                let result = await axios.delete('', {
+                let result = await axios.delete('http://localhost:3001/api/recipes/delete-recipe', {
                     _id: props.user._id,
-                    idMeal: idMeal
+                    idMeal: meal.idMeal
                 })
-
                 console.log('result delete a meal', result)
             }
             catch (e) {

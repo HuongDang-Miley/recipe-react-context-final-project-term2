@@ -71,6 +71,18 @@ function App() {
   }, [])
 
 
+  // Get Fav List
+  useEffect(async () => {
+    console.log('user', user)
+    try {
+      
+      let response = await axios.get('http://localhost:3001/api/recipes/all-user-fav-meals/5fdf73f8f052e3d6627b88dc')
+      console.log('user fav meals:', response.data.allUserFavMeals.favMeals) 
+      setFavList(response.data.allUserFavMeals.favMeals)
+    }
+    catch (e) { console.log(e) }
+  }, [])
+
   return (
     <div className="App">
       <AuthContext.Provider value={{ auth, user, authorize, randomList, favList, test }}>

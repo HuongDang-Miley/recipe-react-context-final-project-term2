@@ -1,14 +1,19 @@
 
-import React from 'react';
+import React, {useContext} from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { MealThumb } from './MealThumb'
 import { FavButton } from './FavButton'
 import MenuAppBar from '../menuBars/AllMealsBar'
+import {AuthContext} from '../Context'
 import './MealThumb.css'
+import { CollectionsOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
+
+  
+
     root: {
         flexGrow: 1,
     },
@@ -27,6 +32,9 @@ const wrapper = {
 }
 
 export default function FavList({ randomList }) {
+    let {favList} = useContext(AuthContext)
+    
+    console.log(favList)
     const classes = useStyles();
     return (
         <>
@@ -34,8 +42,8 @@ export default function FavList({ randomList }) {
             <div style={wrapper}>
                 <div className={classes.root}>
                     <Grid container spacing={3} direction="row" justify="center">
-                        {randomList !== undefined
-                            ? (randomList.map(item => {
+                        {favList !== undefined
+                            ? (favList.map(item => {
                                 return (
                                     <Grid item xs={6} sm={3}>
                                         <Link to={{ pathname: `/single-meal`, meal: { item } }}>
