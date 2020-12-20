@@ -7,13 +7,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import SingleMealBar from '../menuBars/SingleMealBar'
 import Paper from '@material-ui/core/Paper';
-import { LinkedCamera, LinkedCameraRounded } from '@material-ui/icons';
+import { AuthContext } from '../Context'
 
 
 
 export const SingleMealPage = (props) => {
+    const id = props.match.user
     let item = props.location.meal.item
-    let { like, strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
+    console.log(props.user._id)
+
+    let { idMeal, like, strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
 
     let ingredients = [
         item.strIngredient1,
@@ -44,8 +47,32 @@ export const SingleMealPage = (props) => {
         else if (item.like === false) { item.like = true }
         setMeal(meal)
     }
+
     useEffect(async () => {
-        let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', {meal})
+        if (meal.like === false) {
+            let favMeal = {
+                _id: props.user._id,
+                ...meal,
+                like: true,
+            }
+            try {
+                let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', favMeal)
+                console.log(addMeal)
+            }
+            catch (e) { console.log(e) }
+        } else if (meal.like === true) {
+            try {
+                let result = await axios.delete('', {
+                    _id: props.user._id,
+                    idMeal: idMeal
+                })
+
+                console.log('result delete a meal', result)
+            }
+            catch (e) {
+                console.log(e)
+            }
+        }
 
     }, [meal])
 

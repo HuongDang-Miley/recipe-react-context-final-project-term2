@@ -7,26 +7,49 @@ import Register from './components/loginAndRegister/Register'
 import RandomList from './components/MealThumb/RandomList'
 import FavList from './components/MealThumb/FavList'
 import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
-import {AuthContext} from './components/Context'
+import { AuthContext } from './components/Context'
 
 import './App.css';
+import { SignalCellularNull } from '@material-ui/icons'
 
 function App() {
   let [randomList, setRandomList] = useState([])
   let [favList, setFavList] = useState([])
+  let [jwtToken, setJwtToken] = useState(null)
   let [auth, setAuth] = useState(false)
   let [user, setUser] = useState(null)
+  let [test, setTest] = useState('testing context')
 
   // Get user data from jwtToken
   const authorize = (jwtToken) => {
-    let decodedToken = jwt_decode(jwtToken)
+    console.log('jwtToken in authorize', jwtToken)
+    setJwtToken(jwtToken)
+  }
+  
+  
+  // console.log('jwtToken ', token)
+  
+  useEffect(() => {
+    let token = localStorage.getItem('jwtToken')
+    console.log('token in useEffect', token)
+    let decodedToken = jwt_decode(token)
     console.log('decoded browser token', decodedToken)
     setAuth(true)
     setUser({
       email: decodedToken.email,
       _id: decodedToken._id
     })
-  }
+  }, [jwtToken])
+
+  // const authorize = (jwtToken) => {
+  //   let decodedToken = jwt_decode(jwtToken)
+  //   console.log('decoded browser token', decodedToken)
+  //   setAuth(true)
+  //   setUser({
+  //     email: decodedToken.email,
+  //     _id: decodedToken._id
+  //   })
+  // }
 
   useEffect(async () => {
     try {
@@ -42,7 +65,6 @@ function App() {
         item.like = false
         return item
       })
-      console.log(latestMeals)
       setRandomList(latestMeals)
     }
     catch (e) { console.log(e) }
@@ -51,16 +73,16 @@ function App() {
 
   return (
     <div className="App">
-      <AuthContext.Provider value={{auth, user, authorize, randomList, favList, test: 'test'}}>
-      <Router>
-        <Switch>
-          <Route exact path='/login' component={(props) => <Login {...props} authorize={authorize} />} />
-          <Route exact path='/register' component={(props) => <Register {...props} authorize={authorize} />} />
-          <Route exact path='/all-meals' component={RandomList}/>
-          <Route exact path='/favorites' component={FavList}/>
-          <Route exact path='/single-meal' component={SingleMealPage} />
-        </Switch>
-      </Router>
+      <AuthContext.Provider value={{ auth, user, authorize, randomList, favList, test }}>
+        <Router>
+          <Switch>
+            <Route exact path='/login' component={(props) => <Login {...props} authorize={authorize} />} />
+            <Route exact path='/register' component={(props) => <Register {...props} authorize={authorize} />} />
+            <Route exact path='/all-meals' component={RandomList} />
+            <Route exact path='/favorites' component={FavList} />
+  <Route exact path='/single-meal' component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth}/> }/>
+          </Switch>
+        </Router>
       </AuthContext.Provider>
     </div>
   );
