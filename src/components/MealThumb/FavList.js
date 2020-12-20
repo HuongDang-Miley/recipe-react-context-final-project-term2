@@ -1,12 +1,11 @@
 
-import React, {useContext} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { MealThumb } from './MealThumb'
 import { FavButton } from './FavButton'
 import MenuAppBar from '../menuBars/AllMealsBar'
-import {AuthContext} from '../Context'
 import './MealThumb.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,9 +26,7 @@ const wrapper = {
     margin: 'auto'
 }
 
-export default function RandomList() {
-    const {auth, user, authorize, randomList, favList} = useContext(AuthContext)
-    
+export default function FavList({ randomList }) {
     const classes = useStyles();
     return (
         <>

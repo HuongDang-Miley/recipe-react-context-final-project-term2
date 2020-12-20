@@ -120,9 +120,9 @@ justify-self: start;
   }
   
   .instruction-paragraph {
+    padding:  24px 0px 24px 0px;
     width: 70%;
     margin: 24px auto;
-    /* background-color: indianred; */
     overflow: auto;
   }
 

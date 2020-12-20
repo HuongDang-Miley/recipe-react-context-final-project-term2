@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Box from '@material-ui/core/Box';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     color: 'white',
+    marginRight: 40,
   },
 }));
 
@@ -47,58 +49,58 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      {/* <FormGroup>
-        <FormControlLabel
-          control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-          label={auth ? 'Logout' : 'Login'}
-        />
-      </FormGroup> */}
       <AppBar position="static">
-        <Toolbar>
-          {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton> */}
-          <NavLink to='/all-meals' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
-            {/* <Typography > */}
-              All Meals
-          {/* </Typography> */}
+        <Toolbar display="flex" p={1} >
+          <Box width='100%' backgroundColor="green">
+            <IconButton>
+              <NavLink to='/all-meals' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
+                All Meals
           </NavLink>
-          <NavLink to='/favorites' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
-            {/* <Typography > */}
-              Favorites
-          {/* </Typography> */}
+            </IconButton>
+            <IconButton>
+              <NavLink to='/favorites' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
+                Favorites
           </NavLink>
-          {auth && (
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+            </IconButton>
+
+
+          </Box>
+          <Box p={1} flexShrink={1}>
+            {auth && (
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                  <NavLink to='/login' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
+                    Logout
+          </NavLink>
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                </Menu>
+              </div>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
     </div>

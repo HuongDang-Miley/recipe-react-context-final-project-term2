@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import './SingleMealPage.css'
 import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import SingleMealBar from '../menuBars/SingleMealBar'
+import Paper from '@material-ui/core/Paper';
+import { LinkedCamera, LinkedCameraRounded } from '@material-ui/icons';
 
 
 
 export const SingleMealPage = (props) => {
     let item = props.location.meal.item
-    let { strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
+    let { like, strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
 
     let ingredients = [
         item.strIngredient1,
@@ -32,18 +38,38 @@ export const SingleMealPage = (props) => {
         item.strIngredient20,
     ]
 
+    const [meal, setMeal] = useState(item)
+    function handleAddToFavorites() {
+        if (item.like === true) { item.like = false }
+        else if (item.like === false) { item.like = true }
+        setMeal(meal)
+    }
+    useEffect(async () => {
+        let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', {meal})
+
+    }, [meal])
 
     return (
         <>
             <div>
-        <SingleMealBar/>
+                <SingleMealBar />
                 <div id="recipe-div">
                     <div id='header'>
                         <h1>{strMeal}</h1>
                         <div id='video-info-wrapper'>
                             <img class='recipe-hero-img' src={strMealThumb} />
                             <ul id="info">
-                                <button className="add-to-favorites-button">Add To Favorites</button>
+
+
+                                <Button
+                                    onClick={handleAddToFavorites}
+                                    variant="outlined"
+                                    color="secondary"
+                                    size="small"
+                                    // className={classes.button}
+                                    startIcon={<FavoriteIcon />}
+
+                                >add to favorites</Button>
                                 <li className="info-list">Tags: {strTags}</li>
                                 <li className="info-list">Country: {strArea}</li>
                                 <li className="info-list">Catergory: {strCategory}</li>
@@ -57,26 +83,28 @@ export const SingleMealPage = (props) => {
                     </div>
                     <div id='ingredients'>
                         <h2>Ingredients</h2>
-                        <div className='ingredient-and-instruction-wrapper'>
-                            <p className='instruction-paragraph'>
+                        <Paper elevation={3}>
+                            {<p className='instruction-paragraph'>
                                 {ingredients.length !== 0
                                     ? (ingredients.map(item => { if (item !== '' && item !== null) { return (<li>{item}</li>) } }))
                                     : ""}
-                            </p>
-                        </div>
+                            </p>}
+                        </Paper>
+
                     </div>
                     <div id='instruction'>
                         <h2>Instruction</h2>
-                        <div className='ingredient-and-instruction-wrapper'>
+                        <Paper elevation={3} padding={20}>
                             <p className='instruction-paragraph'>{strInstructions}</p>
-                        </div>
+                        </Paper>
+
                     </div>
                 </div>
                 <div id='footer'>
                     © 2020 Code Immersives - Final Project Term2 By Miley <br />
               All rights reserved.
             </div>
-            <AppBar/>
+                <AppBar />
             </div>
         </>
     )

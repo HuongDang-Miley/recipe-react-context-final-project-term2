@@ -5,26 +5,28 @@ import jwt_decode from 'jwt-decode'
 import Login from './components/loginAndRegister/Login'
 import Register from './components/loginAndRegister/Register'
 import RandomList from './components/MealThumb/RandomList'
+import FavList from './components/MealThumb/FavList'
 import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
+import {AuthContext} from './components/Context'
 
 import './App.css';
-import { FaRegClosedCaptioning } from 'react-icons/fa'
 
 function App() {
   let [randomList, setRandomList] = useState([])
+  let [favList, setFavList] = useState([])
   let [auth, setAuth] = useState(false)
-  let [user, setUser] = useState({})
+  let [user, setUser] = useState(null)
 
-    // Get user data from jwtToken
-    const authorize = (jwtToken) => {
-      let decodedToken = jwt_decode(jwtToken)
-      console.log('decoded browser token', decodedToken)
-      setAuth(true)
-      setUser({
-        email: decodedToken.email,
-        _id: decodedToken._id
-      })
-    }
+  // Get user data from jwtToken
+  const authorize = (jwtToken) => {
+    let decodedToken = jwt_decode(jwtToken)
+    console.log('decoded browser token', decodedToken)
+    setAuth(true)
+    setUser({
+      email: decodedToken.email,
+      _id: decodedToken._id
+    })
+  }
 
   useEffect(async () => {
     try {
@@ -49,16 +51,17 @@ function App() {
 
   return (
     <div className="App">
+      <AuthContext.Provider value={{auth, user, authorize, randomList, favList, test: 'test'}}>
       <Router>
         <Switch>
           <Route exact path='/login' component={(props) => <Login {...props} authorize={authorize} />} />
           <Route exact path='/register' component={(props) => <Register {...props} authorize={authorize} />} />
-          <Route exact path='/all-meals'>
-            <RandomList randomList={randomList} />
-          </Route>
+          <Route exact path='/all-meals' component={RandomList}/>
+          <Route exact path='/favorites' component={FavList}/>
           <Route exact path='/single-meal' component={SingleMealPage} />
         </Switch>
       </Router>
+      </AuthContext.Provider>
     </div>
   );
 }
