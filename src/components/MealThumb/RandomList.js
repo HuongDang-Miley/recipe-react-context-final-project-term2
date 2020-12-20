@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { MealThumb } from './MealThumb'
 import { FavButton } from './FavButton'
-import MenuAppBar from '../menuBars/MenuAppBar'
+import MenuAppBar from '../menuBars/AllMealsBar'
 import './MealThumb.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,8 +26,7 @@ const wrapper = {
     margin: 'auto'
 }
 
-
-export default function FullWidthGrid({ randomList }) {
+export default function RandomList({ randomList }) {
     const classes = useStyles();
     return (
         <>

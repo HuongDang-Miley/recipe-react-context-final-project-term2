@@ -1,9 +1,11 @@
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import FullWidthGrid from './components/MealThumb/MealThumbWrapper'
-
+import Login from './components/loginAndRegister/Login'
+import Register from './components/loginAndRegister/Register'
+import RandomList from './components/MealThumb/RandomList'
 import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
+
 import './App.css';
 
 function App() {
@@ -18,8 +20,7 @@ function App() {
           useQueryString: true
         }
       })
-
-      // Add like = false property to every meal
+      // Add key like = false  to every meal
       let latestMeals = response.data.meals.map(item => {
         item.like = false
         return item
@@ -34,10 +35,11 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {/* <MenuAppBar /> */}
         <Switch>
+          <Route exact path='/login' component={Login}/>
+          <Route exact path='/register' component={Register}/>
           <Route exact path='/all-meals'>
-            <FullWidthGrid randomList={randomList} />
+            <RandomList randomList={randomList} />
           </Route>
           <Route exact path='/single-meal' component={SingleMealPage} />
         </Switch>
