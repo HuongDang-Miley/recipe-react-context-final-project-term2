@@ -8,6 +8,7 @@ import RandomList from './components/MealThumb/RandomList'
 import FavList from './components/MealThumb/FavList'
 import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
 import { AuthContext } from './components/Context'
+import { Test } from './components/Test'
 
 import './App.css';
 import { SignalCellularNull } from '@material-ui/icons'
@@ -18,17 +19,17 @@ function App() {
   let [jwtToken, setJwtToken] = useState(null)
   let [auth, setAuth] = useState(false)
   let [user, setUser] = useState(null)
-  let [test, setTest] = useState('testing context')
+  let [test, setTest] = useState('testing context useState')
 
   // Get user data from jwtToken
   const authorize = (jwtToken) => {
     console.log('jwtToken in authorize', jwtToken)
     setJwtToken(jwtToken)
   }
-  
-  
+
+
   // console.log('jwtToken ', token)
-  
+
   useEffect(() => {
     let token = localStorage.getItem('jwtToken')
     console.log('token in useEffect', token)
@@ -68,17 +69,32 @@ function App() {
       setRandomList(latestMeals)
     }
     catch (e) { console.log(e) }
-  }, [])
+  }, [user])
 
 
   // Get Fav List
   useEffect(async () => {
-    console.log('user', user)
     try {
-      
-      let response = await axios.get('http://localhost:3001/api/recipes/all-user-fav-meals/5fdf73f8f052e3d6627b88dc')
-      console.log('user fav meals:', response.data.allUserFavMeals.favMeals) 
-      setFavList(response.data.allUserFavMeals.favMeals)
+      let favResponse = await axios.get(`http://localhost:3001/api/recipes/all-user-fav-meals/${user._id}`)
+      let favMeals = favResponse.data.allUserFavMeals.favMeals
+      let commentResponse = await axios.get('http://localhost:3001/api/comments/get-all-comments')
+      let allComments = commentResponse.data.arrayComments
+
+      let favMealsWithComments = favMeals.map(meal => {
+        meal.comments = []
+        for (let item of allComments) {
+          if (meal.idMeal === item.idMeal) {
+            meal.comments.push(item)
+          }
+        }
+        return meal
+      }, [user])
+
+      console.log('favMealsWithComments', favMealsWithComments)
+      console.log('favMeals', favMeals)
+      console.log('allComments', allComments)
+      // setFavList(favResponse.data.allUserFavMeals.favMeals)
+      setFavList(favMealsWithComments)
     }
     catch (e) { console.log(e) }
   }, [])
@@ -92,9 +108,10 @@ function App() {
             <Route exact path='/register' component={(props) => <Register {...props} authorize={authorize} />} />
             <Route exact path='/all-meals' component={RandomList} />
             <Route exact path='/favorites' component={FavList} />
-  <Route exact path='/single-meal' component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth}/> }/>
+            <Route exact path='/single-meal' component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth} />} />
           </Switch>
         </Router>
+        {/* <Test/> */}
       </AuthContext.Provider>
     </div>
   );

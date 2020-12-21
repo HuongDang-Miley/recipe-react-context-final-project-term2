@@ -31,8 +31,9 @@ const wrapper = {
     margin: 'auto'
 }
 
-export default function FavList({ randomList }) {
+export default function FavList() {
     let {favList} = useContext(AuthContext)
+    console.log('favList in favList',favList)
     
     console.log(favList)
     const classes = useStyles();

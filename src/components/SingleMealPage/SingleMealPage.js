@@ -8,16 +8,16 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import SingleMealBar from '../menuBars/SingleMealBar'
 import Paper from '@material-ui/core/Paper';
 import { AuthContext } from '../Context'
+import Comment from './Comment'
 
 
 
 export const SingleMealPage = (props) => {
     const id = props.match.user
     let item = props.location.meal.item
-    console.log(props.user._id)
+    let { comments, idMeal, like, strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
 
-    let { idMeal, like, strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
-
+    console.log(comments)
     let ingredients = [
         item.strIngredient1,
         item.strIngredient3,
@@ -57,7 +57,7 @@ export const SingleMealPage = (props) => {
             }
             try {
                 let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', favMeal)
-                console.log('result add a meal',addMeal)
+                console.log('result add a meal', addMeal)
             }
             catch (e) { console.log(e) }
         } else if (meal.like === true) {
@@ -122,6 +122,14 @@ export const SingleMealPage = (props) => {
                         <h2>Instruction</h2>
                         <Paper elevation={3} padding={20}>
                             <p className='instruction-paragraph'>{strInstructions}</p>
+                        </Paper>
+
+                    </div>
+                    <div id='comments'>
+                        <h2>Review</h2>
+                        <Paper elevation={3} padding={20}>
+                            <p className='instruction-paragraph'>{strInstructions}</p>
+                            <Comment comments={comments}/>
                         </Paper>
 
                     </div>
