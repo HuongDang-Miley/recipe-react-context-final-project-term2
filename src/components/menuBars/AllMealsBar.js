@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, NavLink } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,6 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Box from '@material-ui/core/Box';
+import { AuthContext } from '../Context';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,15 +30,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MenuAppBar() {
+export default function MenuAppBar(props) {
+  const { auth, user, authorize, randomList, favList } = useContext(AuthContext)
+  console.log('auth in MenuBar', auth)
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+  // const handleChange = (event) => {
+  //   setAuth(event.target.checked);
+  // };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,11 +50,16 @@ export default function MenuAppBar() {
     setAnchorEl(null);
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem('jwtToken')
+    localStorage.removeItem('clickedMeal')
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar display="flex" p={1} >
-          <Box width='100%' backgroundColor="green">
+          <Box width='100%'>
             <IconButton>
               <NavLink to='/all-meals' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
                 All Meals
@@ -66,7 +74,7 @@ export default function MenuAppBar() {
 
           </Box>
           <Box p={1} flexShrink={1}>
-            {auth && (
+            {user && (
               <div>
                 <IconButton
                   aria-label="account of current user"
@@ -75,10 +83,14 @@ export default function MenuAppBar() {
                   onClick={handleMenu}
                   color="inherit"
                 >
-                  <AccountCircle />
-                  <NavLink to='/login' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
-                    Logout
-          </NavLink>
+                  <AccountCircle style={{ marginRight: 4 }} />
+                  <span style={{ marginRight: 10 }}>Account</span>
+                  {/* <NavLink to='/login' variant="h6" activeStyle={{ textDecoration: 'underline' }} className={classes.title}>
+                    <button
+                      onClick={handleLogOut}>
+                      Logout
+                    </button>
+                  </NavLink> */}
                 </IconButton>
                 <Menu
                   id="menu-appbar"
@@ -95,8 +107,10 @@ export default function MenuAppBar() {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleClose} style={{ color: 'black' }}>{user.email}</MenuItem>
+                  <NavLink to='/login'  activeStyle={{ textDecoration: 'underline'}} style={{ color: 'black' }}>
+                    <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+                  </NavLink>
                 </Menu>
               </div>
             )}

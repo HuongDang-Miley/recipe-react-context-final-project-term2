@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
@@ -8,7 +8,8 @@ import RandomList from './components/MealThumb/RandomList'
 import FavList from './components/MealThumb/FavList'
 import { SingleMealPage } from './components/SingleMealPage/SingleMealPage'
 import { AuthContext } from './components/Context'
-import { Test } from './components/Test'
+import { PrivateRoute } from './components/privateRoute/PrivateRoute'
+import { Main } from './components/privateRoute/Main'
 
 import './App.css';
 import { SignalCellularNull } from '@material-ui/icons'
@@ -23,7 +24,7 @@ function App() {
 
   // Get user data from jwtToken
   const authorize = (jwtToken) => {
-    console.log('jwtToken in authorize', jwtToken)
+    // console.log('jwtToken in authorize', jwtToken)
     setJwtToken(jwtToken)
   }
 
@@ -32,15 +33,28 @@ function App() {
 
   useEffect(() => {
     let token = localStorage.getItem('jwtToken')
-    console.log('token in useEffect', token)
-    let decodedToken = jwt_decode(token)
-    console.log('decoded browser token', decodedToken)
-    setAuth(true)
-    setUser({
-      email: decodedToken.email,
-      _id: decodedToken._id
-    })
-  }, [jwtToken])
+    // console.log('token in useEffect', token)
+    if (token) {
+      let decodedToken = jwt_decode(token)
+      // console.log('decoded browser token', decodedToken)
+      setAuth(true)
+      setUser({
+        email: decodedToken.email,
+        _id: decodedToken._id
+      })
+    }
+
+
+
+
+  }, [])
+
+  useEffect(() => {
+    // console.log("---")
+    if (user) {
+      getFavsMeal()
+    }
+  }, [user])
 
   // const authorize = (jwtToken) => {
   //   let decodedToken = jwt_decode(jwtToken)
@@ -66,21 +80,9 @@ function App() {
         item.like = false
         return item
       })
-      setRandomList(latestMeals)
-    }
-    catch (e) { console.log(e) }
-  }, [user])
-
-
-  // Get Fav List
-  useEffect(async () => {
-    try {
-      let favResponse = await axios.get(`http://localhost:3001/api/recipes/all-user-fav-meals/${user._id}`)
-      let favMeals = favResponse.data.allUserFavMeals.favMeals
       let commentResponse = await axios.get('http://localhost:3001/api/comments/get-all-comments')
       let allComments = commentResponse.data.arrayComments
-
-      let favMealsWithComments = favMeals.map(meal => {
+      let randomMealsWithComments = latestMeals.map(meal => {
         meal.comments = []
         for (let item of allComments) {
           if (meal.idMeal === item.idMeal) {
@@ -88,17 +90,69 @@ function App() {
           }
         }
         return meal
-      }, [user])
-
-      console.log('favMealsWithComments', favMealsWithComments)
-      console.log('favMeals', favMeals)
-      console.log('allComments', allComments)
-      // setFavList(favResponse.data.allUserFavMeals.favMeals)
-      setFavList(favMealsWithComments)
+      })
+      
+      setRandomList(randomMealsWithComments)
     }
     catch (e) { console.log(e) }
   }, [])
 
+    async function getFavsMeal() {
+      try {
+        let favResponse = await axios.get(`http://localhost:3001/api/recipes/all-user-fav-meals/${user._id}`)
+        let favMeals = favResponse.data.allUserFavMeals.favMeals
+        let commentResponse = await axios.get('http://localhost:3001/api/comments/get-all-comments')
+        let allComments = commentResponse.data.arrayComments
+  
+        let favMealsWithComments = favMeals.map(meal => {
+          meal.comments = []
+          for (let item of allComments) {
+            if (meal.idMeal === item.idMeal) {
+              meal.comments.push(item)
+            }
+          }
+          return meal
+        })
+  
+        // console.log('favMealsWithComments', favMealsWithComments)
+        // console.log('favMeals', favMeals)
+        // console.log('allComments', allComments)
+        // setFavList(favResponse.data.allUserFavMeals.favMeals)
+        // console.log("====")
+        setFavList(favMealsWithComments)
+      }
+      catch (e) { console.log(e) }
+    }
+
+  // Get Fav List
+  // useEffect(async () => {
+  //   console.log('user', user)
+  //   try {
+  //     let favResponse = await axios.get(`http://localhost:3001/api/recipes/all-user-fav-meals/${user._id}`)
+  //     let favMeals = favResponse.data.allUserFavMeals.favMeals
+  //     let commentResponse = await axios.get('http://localhost:3001/api/comments/get-all-comments')
+  //     let allComments = commentResponse.data.arrayComments
+
+  //     let favMealsWithComments = favMeals.map(meal => {
+  //       meal.comments = []
+  //       for (let item of allComments) {
+  //         if (meal.idMeal === item.idMeal) {
+  //           meal.comments.push(item)
+  //         }
+  //       }
+  //       return meal
+  //     })
+
+  //     // console.log('favMealsWithComments', favMealsWithComments)
+  //     // console.log('favMeals', favMeals)
+  //     // console.log('allComments', allComments)
+  //     // setFavList(favResponse.data.allUserFavMeals.favMeals)
+  //     console.log("====")
+  //     setFavList(favMealsWithComments)
+  //   }
+  //   catch (e) { console.log(e) }
+  // }, [jwtToken, user])
+  
   return (
     <div className="App">
       <AuthContext.Provider value={{ auth, user, authorize, randomList, favList, test }}>
@@ -106,9 +160,22 @@ function App() {
           <Switch>
             <Route exact path='/login' component={(props) => <Login {...props} authorize={authorize} />} />
             <Route exact path='/register' component={(props) => <Register {...props} authorize={authorize} />} />
+            {/* <PrivateRoute
+                path='/main'
+                // state={this.state}
+                // logOut={this.logOut}
+                // addToFavorites={this.addToFavorites}
+                // loadAllFavMeals={this.loadAllFavMeals}
+                component={Main} /> */}
+            <PrivateRoute path='/main' render={(props) => { <Main /> }} />
+
+
             <Route exact path='/all-meals' component={RandomList} />
             <Route exact path='/favorites' component={FavList} />
-            <Route exact path='/single-meal' component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth} />} />
+            {/* <Route exact path={MY_ROUTE(':idMeal')} component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth} favList={favList} />} /> */}
+            <Route exact path={MY_ROUTE(':idMeal')} component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth} favList={favList} />} />
+            <Route exact path='/logout' render={() => <Redirect to='/login' />} />
+            {/* <Route exact path='/single-meal' component={(props) => <SingleMealPage {...props} test={test} user={user} auth={auth} />} /> */}
           </Switch>
         </Router>
         {/* <Test/> */}
@@ -118,3 +185,12 @@ function App() {
 }
 
 export default App;
+
+
+export const MY_ROUTE = (idMeal) => `/single-meal/${idMeal}/`;
+
+// <Route path={MY_ROUTE(':userId')} />
+// And so in your component
+
+{/* <Link to={MY_ROUTE(idMeal)} params={{userId: idMeal}} /> */ }
+// <Link to={MY_ROUTE(1)} params={{userId: 1}} />

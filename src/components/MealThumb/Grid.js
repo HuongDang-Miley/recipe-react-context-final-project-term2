@@ -34,7 +34,7 @@ const wrapper = {
 
 export default function FullWidthGrid() {
     const classes = useStyles();
-    console.log(MealThumb)
+    // console.log(MealThumb)
 
     return (
         <div style={wrapper}

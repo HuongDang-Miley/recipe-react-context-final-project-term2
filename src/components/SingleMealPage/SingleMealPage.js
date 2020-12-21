@@ -9,15 +9,30 @@ import SingleMealBar from '../menuBars/SingleMealBar'
 import Paper from '@material-ui/core/Paper';
 import { AuthContext } from '../Context'
 import Comment from './Comment'
+import { CommentForm } from './CommentForm'
 
 
 
 export const SingleMealPage = (props) => {
+
+    const [singleMeal, setSingleMeal] = useState(null)
+
+    useEffect(() => {
+        
+        console.log(props.location)
+        console.log(props.location.meal)
+
+        if (props.location.meal?.item === undefined) { return }
+        else {
+            setSingleMeal(props.location.meal.item)
+            // console.log(singleMeal)
+        }
+    }, [])
     const id = props.match.user
-    let item = props.location.meal.item
+    let item = props.location?.meal?.item || JSON.parse(localStorage.getItem("clickedMeal"))
     let { comments, idMeal, like, strArea, strCategory, strInstructions, strMeal, strMealThumb, strTags, strSource } = item
 
-    console.log(comments)
+    
     let ingredients = [
         item.strIngredient1,
         item.strIngredient3,
@@ -48,32 +63,32 @@ export const SingleMealPage = (props) => {
         setMeal(meal)
     }
 
-    useEffect(async () => {
-        if (meal.like === false) {
-            let favMeal = {
-                _id: props.user._id,
-                ...meal,
-                like: true,
-            }
-            try {
-                let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', favMeal)
-                console.log('result add a meal', addMeal)
-            }
-            catch (e) { console.log(e) }
-        } else if (meal.like === true) {
-            try {
-                let result = await axios.delete('http://localhost:3001/api/recipes/delete-recipe', {
-                    _id: props.user._id,
-                    idMeal: meal.idMeal
-                })
-                console.log('result delete a meal', result)
-            }
-            catch (e) {
-                console.log(e)
-            }
-        }
+    // useEffect(async () => {
+    //     if (meal.like === false) {
+    //         let favMeal = {
+    //             _id: props.user._id,
+    //             ...meal,
+    //             like: true,
+    //         }
+    //         try {
+    //             let addMeal = await axios.post('http://localhost:3001/api/recipes/like-recipe', favMeal)
+                
+    //         }
+    //         catch (e) { console.log(e) }
+    //     } else if (meal.like === true) {
+    //         try {
+    //             let result = await axios.delete('http://localhost:3001/api/recipes/delete-recipe', {
+    //                 _id: props.user._id,
+    //                 idMeal: meal.idMeal
+    //             })
+    //             // console.log('result delete a meal', result)
+    //         }
+    //         catch (e) {
+    //             console.log(e)
+    //         }
+    //     }
 
-    }, [meal])
+    // }, [meal])
 
     return (
         <>
@@ -128,8 +143,8 @@ export const SingleMealPage = (props) => {
                     <div id='comments'>
                         <h2>Review</h2>
                         <Paper elevation={3} padding={20}>
-                            <p className='instruction-paragraph'>{strInstructions}</p>
-                            <Comment comments={comments}/>
+                            <CommentForm />
+                            <Comment comments={comments} />
                         </Paper>
 
                     </div>

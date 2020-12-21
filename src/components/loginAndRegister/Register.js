@@ -69,7 +69,7 @@ export default class Login extends Component {
                     password: this.state.password
                 })
 
-                console.log('newUser axios', newUser)
+                
                 let userEmail = newUser.data.email
                 let twtToken = newUser.data.jwtToken
 

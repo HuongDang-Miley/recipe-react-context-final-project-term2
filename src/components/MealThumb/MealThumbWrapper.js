@@ -44,7 +44,7 @@ const wrapper = {
 
 export default function FullWidthGrid({ randomList }) {
     const classes = useStyles();
-    console.log(randomList)
+    // console.log(randomList)
     return (
         <div style={wrapper}>
 

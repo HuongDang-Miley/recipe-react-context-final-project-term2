@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -5,6 +6,10 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import { deepOrange, deepPurple } from '@material-ui/core/colors'
+import FaceIcon from '@material-ui/icons/Face';
+
 
 const useStyles = makeStyles({
   root: {
@@ -17,38 +22,60 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: 14,
+    lineHeight: 40
   },
   pos: {
     marginBottom: 12,
   },
-});
+})
 
-export default function Comment(props) {
-    console.log(props)
+const useAvaStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  purple: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+}));
+
+
+export default function Comment({ comments }) {
+  // console.log('comments', comments)
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+  const ava = useAvaStyles()
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Word of the Day
-        </Typography>
-        <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-    </Card>
+    <>
+      { comments.length !== 0
+        ? (comments.map(item => {
+          return (
+            <Card className={classes.root}>
+              <CardContent>
+                <Avatar sizes="10" className={ava.orange}>N</Avatar>
+                <Typography className={classes.bullet} color="textSecondary" gutterBottom>
+                  {item.email}
+                </Typography>
+                <Typography variant="body1" component="p">
+                  {item.comment}
+                </Typography>
+              </CardContent>
+            </Card>
+          )
+        }))
+        : ''
+      }
+    </>
   );
 }
